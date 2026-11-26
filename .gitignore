@@ -1,11 +1,18 @@
-# Python / Backend
+# Secrets & environment variables
+.env
+backend/.env
+
+# Python virtual environment & cache
+venv/
 backend/venv/
 __pycache__/
 *.pyc
-*.db
-.env
 
-# React / Frontend
+# Local SQLite databases
+*.db
+backend/*.db
+
+# Node dependencies & build output
+node_modules/
 frontend/node_modules/
 frontend/dist/
-.DS_Store
