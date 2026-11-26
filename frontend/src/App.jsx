@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GeetBeatsLogo from "./GeetBeatsLogo";
+import TopChartFlipCards from "./components/TopChartFlipCards";
 
 const API_URL = "http://localhost:8000";
 
@@ -330,16 +331,19 @@ export default function App() {
           </div>
         ) : (
           <>
-            <section className="bg-[#121826] border border-slate-800 rounded-2xl p-6 sm:p-10 mb-8">
-              <p className="text-xs font-extrabold tracking-widest text-[#FF6B00] uppercase mb-2">
-                ✨ MULTI-SCRIPT LYRIC ENGINE
-              </p>
-              <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight max-w-2xl">
-                Read Bollywood, Punjabi & English Lyrics Your Way.
-              </h1>
-              <p className="text-slate-400 text-sm sm:text-base mt-3 max-w-xl">
-                Switch seamlessly between Hinglish, हिंदी (Devanagari), and English translations on every track.
-              </p>
+            <section className="bg-[#121826] border border-slate-800 rounded-2xl p-6 sm:p-10 mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+              <div>
+                <p className="text-xs font-extrabold tracking-widest text-[#FF6B00] uppercase mb-2">
+                  ✨ MULTI-SCRIPT LYRIC ENGINE
+                </p>
+                <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight max-w-2xl">
+                  Read Bollywood, Punjabi & English Lyrics Your Way.
+                </h1>
+                <p className="text-slate-400 text-sm sm:text-base mt-3 max-w-xl">
+                  Switch seamlessly between Hinglish, हिंदी (Devanagari), and English translations on every track.
+                </p>
+              </div>
+              <TopChartFlipCards onOpenSong={handleOpenSong} />
             </section>
 
             {/* Genre Filter Pills */}
