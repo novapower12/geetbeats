@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import engine, get_db, SessionLocal
 import models
+from lyric_service import fetch_and_prepare_song
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -16,7 +17,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Seed initial Bollywood, Punjabi, and English songs if database is empty
 @app.on_event("startup")
 def seed_songs():
     db = SessionLocal()
@@ -66,7 +66,20 @@ def list_songs(genre: str = "All", search: str = "", db: Session = Depends(get_d
         query = query.filter(
             (models.Song.title.ilike(f"%{search}%")) | (models.Song.artist.ilike(f"%{search}%"))
         )
-    return query.all()
+    results = query.all()
+
+    # Auto-fetch & save any searched song not yet in the database
+    if search and len(search.strip()) >= 3 and len(results) == 0:
+        detected_genre = genre if genre != "All" else "Bollywood"
+        fetched = fetch_and_prepare_song(search.strip(), genre=detected_genre)
+        if fetched:
+            new_song = models.Song(**fetched, views=1)
+            db.add(new_song)
+            db.commit()
+            db.refresh(new_song)
+            results = [new_song]
+
+    return results
 
 @app.get("/songs/{song_id}")
 def get_song(song_id: int, db: Session = Depends(get_db)):
